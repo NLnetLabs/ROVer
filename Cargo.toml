@@ -1,0 +1,19 @@
+[package]
+authors = ["Ximon Eighteen <3304436+ximon18@users.noreply.github.com>"]
+edition = "2018"
+name = "ROVer"
+version = "0.1.0"
+[dependencies]
+serde = "*"
+serde_json = "*"
+
+[dependencies.serenity]
+version = "0.10"
+
+[dependencies.tokio]
+features = ["macros", "rt-multi-thread"]
+version = "1.0"
+
+[dependencies.ureq]
+features = ["json"]
+version = "2.1.0"
