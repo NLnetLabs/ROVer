@@ -24,6 +24,6 @@ jobs:
     - if: matrix.rust == 'stable'
       run: rustup component add clippy
     - if: matrix.rust == 'stable'
-      run: cargo clippy -- -D warnings
+      run: cargo clippy
     - run: cargo build --verbose --locked
     - run: cargo test --verbose
