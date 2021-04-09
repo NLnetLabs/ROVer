@@ -1,13 +1,18 @@
 mod constants;
 mod validity;
 
-use serenity::client::{Client, Context, EventHandler};
-use serenity::framework::standard::{
-    macros::{command, group},
-    CommandResult, StandardFramework,
+use serenity::{
+    async_trait,
+    framework::{
+        standard::{
+            macros::{command, group},
+            Args, CommandResult,
+        },
+        StandardFramework,
+    },
+    model::channel::Message,
+    prelude::*,
 };
-use serenity::model::channel::Message;
-use serenity::{async_trait, framework::standard::Args};
 
 use std::env;
 
