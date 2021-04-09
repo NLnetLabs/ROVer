@@ -2,7 +2,7 @@
 authors = ["Ximon Eighteen <3304436+ximon18@users.noreply.github.com>"]
 edition = "2018"
 name = "ROVer"
-version = "0.1.0"
+version = "0.1.0-dev"
 
 [dependencies]
 serde = "*"
