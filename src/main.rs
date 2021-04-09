@@ -81,7 +81,7 @@ async fn validity(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult
     let mut report = String::new();
     report.push_str("```\n");
     report.push_str(&format!(
-        "Results for AS{asn} - {prefix}: {state}\n",
+        "Results for {asn} - {prefix}: {state}\n",
         asn = res.validated_route.route.origin_asn,
         prefix = res.validated_route.route.prefix,
         state = res.validated_route.validity.state.to_uppercase()
