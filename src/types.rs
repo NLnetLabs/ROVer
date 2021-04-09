@@ -43,10 +43,10 @@ pub struct ValidityResponse {
 
 #[cfg(test)]
 mod tests {
+    use crate::types::ValidityResponse;
+
     #[test]
     fn test_json_parsing() {
-        use crate::validity::ValidityResponse;
-
         let routinator_validity_http_endpoint_output_sample = r#"
 {
   "validated_route": {
