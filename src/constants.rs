@@ -1,0 +1,10 @@
+pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+
+//  2c0f:fc89:8036::/48
+// 01234567890123456789
+pub const LONGEST_EXPECTED_PREFIX: usize = 20;
+
+// A 32 bit ASN is anything between 131072 - 4199999999
+// AS4199999999
+// 012345678901
+pub const LONGEST_EXPECTED_ASN: usize = 12;

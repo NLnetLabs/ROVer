@@ -1,3 +1,4 @@
+mod constants;
 mod validity;
 
 use serenity::client::{Client, Context, EventHandler};
@@ -10,16 +11,10 @@ use serenity::{async_trait, framework::standard::Args};
 
 use std::env;
 
-use crate::validity::{AddressOrigin, ValidityResponse};
-
-//  2c0f:fc89:8036::/48
-// 01234567890123456789
-const LONGEST_EXPECTED_PREFIX: usize = 20;
-
-// A 32 bit ASN is anything between 131072 - 4199999999
-// AS4199999999
-// 012345678901
-const LONGEST_EXPECTED_ASN: usize = 12;
+use crate::{
+    constants::{APP_VERSION, LONGEST_EXPECTED_ASN, LONGEST_EXPECTED_PREFIX},
+    validity::{AddressOrigin, ValidityResponse},
+};
 
 #[group]
 #[commands(about, help, validity)]
@@ -52,11 +47,18 @@ async fn main() {
 
 #[command]
 async fn about(ctx: &Context, msg: &Message) -> CommandResult {
-    let about = r#"
+    let about = format!(
+        r#"
 ROVer - an open source bot by NLnet Labs for in-chat feedback about the state of the RPKI.
 
+Bot Version: {version}
+Service URI: {service_base_uri}
+
 See https://github.com/NLnetLabs/ROVer for more information.
-"#;
+"#,
+        version = APP_VERSION,
+        service_base_uri = service_base_uri()
+    );
 
     msg.reply(ctx, format!("```{}```", about)).await?;
 
@@ -128,8 +130,7 @@ async fn validity(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult
                 as_number
             };
 
-            let routinator_host = env::var("ROUTINATOR_HOST").expect("Missing environment variable ROUTINATOR_HOST");
-            let query_url = format!("https://{}/api/v1/validity/AS{}/{}", routinator_host, as_number, prefix);
+            let query_url = format!("{}/api/v1/validity/AS{}/{}", service_base_uri(), as_number, prefix);
 
             match ureq::get(&query_url).call() {
                 Err(ureq::Error::Status(400, _)) => "Validity check failed: Invalid AS number or prefix".to_string(),
@@ -154,6 +155,11 @@ async fn validity(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult
     msg.reply(ctx, format!("```{}```", report)).await?;
 
     Ok(())
+}
+
+fn service_base_uri() -> String {
+    let host = env::var("ROUTINATOR_HOST").expect("Missing environment variable ROUTINATOR_HOST");
+    format!("https://{}", host)
 }
 
 fn build_validity_report(json: ValidityResponse) -> String {
