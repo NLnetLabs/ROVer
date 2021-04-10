@@ -1,6 +1,6 @@
 [package]
 name = "ROVer"
-version = "0.1.0-dev"
+version = "0.1.0"
 edition = "2018"
 authors = ["The NLnet Labs RPKI Team <rpki@nlnetlabs.nl>"]
 description = "An RPKI Discord bot."
