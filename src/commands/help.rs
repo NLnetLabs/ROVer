@@ -1,5 +1,8 @@
-use serenity::{client::Context, framework::standard::{Args, CommandResult, macros::command}, model::channel::Message};
-
+use serenity::{
+    client::Context,
+    framework::standard::{macros::command, Args, CommandResult},
+    model::channel::Message,
+};
 
 #[command]
 async fn help(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {

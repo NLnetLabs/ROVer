@@ -1,5 +1,7 @@
 use serde::Deserialize;
 
+// --- /api/v1/validity/<ASNUMBER>/<PREFIX>
+
 #[derive(Deserialize, Debug)]
 pub struct Route {
     pub origin_asn: String,
@@ -39,6 +41,15 @@ pub struct ValidatedRoute {
 #[derive(Deserialize, Debug)]
 pub struct ValidityResponse {
     pub validated_route: ValidatedRoute,
+}
+
+// --- /api/v1/status ---
+
+#[derive(Deserialize, Debug)]
+pub struct StatusResponse {
+    pub version: String,
+    #[serde(rename = "lastUpdateDone")]
+    pub last_update_done: String,
 }
 
 #[cfg(test)]
