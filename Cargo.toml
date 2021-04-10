@@ -1,8 +1,14 @@
 [package]
-authors = ["Ximon Eighteen <3304436+ximon18@users.noreply.github.com>"]
-edition = "2018"
 name = "ROVer"
 version = "0.1.0-dev"
+edition = "2018"
+authors = ["The NLnet Labs RPKI Team <rpki@nlnetlabs.nl>"]
+description = "An RPKI Discord bot."
+repository = "https://github.com/NLnetLabs/ROVer"
+keywords = ["rpki", "routing-security", "bgp"]
+categories = ["command-line-utilities"]
+license = "BSD-3-Clause"
+readme = "README.md"
 
 [[bin]]
 name = "rover"
@@ -30,7 +36,7 @@ name = "rover"
 maintainer = "The NLnet Labs RPKI Team <rpki@nlnetlabs.nl>"
 license-file = ["LICENSE", "0"]
 extended-description = """\
-A Discord bot that fetches and displays the RPKI validity of a route. """
+A Discord bot that fetches and displays the RPKI validity of a route."""
 depends = "$auto, adduser"
 section = "net"
 priority = "optional"
