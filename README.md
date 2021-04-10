@@ -39,7 +39,7 @@ $ cargo build --release --locked
 ```
 $ export DISCORD_TOKEN=xxx
 $ export ROUTINATOR_HOST=some.fqdn.com
-$ ./ROVer
+$ ./target/release/rover
 ```
 
 Tested with [Routinator](https://nlnetlabs.nl/projects/rpki/routinator/) v0.8.3.
