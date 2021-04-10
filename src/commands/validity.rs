@@ -1,4 +1,8 @@
-use serenity::{client::Context, framework::standard::{Args, CommandResult, macros::command}, model::channel::Message};
+use serenity::{
+    client::Context,
+    framework::standard::{macros::command, Args, CommandResult},
+    model::channel::Message,
+};
 
 use crate::{
     types::{AddressOrigin, StatusResponse, ValidityResponse},
@@ -47,7 +51,7 @@ async fn validity(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult
     msg.reply(ctx, format!("```{}```", report)).await?;
 
     Ok(())
-                }
+}
 
 fn get_validity_report(as_number: &str, prefix: &str) -> Result<String, String> {
     let validity_url = format!("{}/api/v1/validity/AS{}/{}", service_base_uri(), as_number, prefix);
@@ -55,16 +59,16 @@ fn get_validity_report(as_number: &str, prefix: &str) -> Result<String, String> 
         Err(ureq::Error::Status(400, _)) => Err("Validity check failed: Invalid AS number or prefix".to_string()),
         Err(ureq::Error::Status(code, _)) => Err(format!("Validity check failed: Status code {}", code)),
         Err(_) => Err("Validity check failed: Unable to contact the service".to_string()),
-                Ok(res) => {
-                    let json_res = res.into_json();
+        Ok(res) => {
+            let json_res = res.into_json();
 
-                    match json_res {
+            match json_res {
                 Err(err) => Err(format!("Validity check failed: Bad response: {}", err)),
                 Ok(validity_json) => Ok(build_validity_report(validity_json)),
-                    }
-                }
             }
         }
+    }
+}
 
 fn get_last_update_done_at() -> Result<String, String> {
     let status_url = format!("{}/api/v1/status", service_base_uri());
@@ -77,7 +81,7 @@ fn get_last_update_done_at() -> Result<String, String> {
             match json_res {
                 Err(err) => Err(format!("Status check failed: Bad response: {}", err)),
                 Ok(status_json) => Ok(status_json.last_update_done),
-}
+            }
         }
     }
 }

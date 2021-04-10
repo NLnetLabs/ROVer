@@ -5,20 +5,11 @@ mod util;
 
 use serenity::{
     async_trait,
-    framework::{
-        standard::{
-            macros::group,
-        },
-        StandardFramework,
-    },
+    framework::{standard::macros::group, StandardFramework},
     prelude::*,
 };
 
-use commands::{
-    about::*,
-    help::*,
-    validity::*,
-};
+use commands::{about::*, help::*, validity::*};
 
 use std::env;
 
