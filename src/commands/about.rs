@@ -22,7 +22,7 @@ See https://github.com/NLnetLabs/ROVer for more information.
 "#,
         version = APP_VERSION,
         service_base_uri = service_base_uri(),
-        service_version = get_routinator_version().unwrap_or("Unavailable".to_string),
+        service_version = get_routinator_version().unwrap_or("Unavailable".to_string()),
     );
 
     msg.reply(ctx, format!("```{}```", about)).await?;
