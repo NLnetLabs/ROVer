@@ -275,7 +275,7 @@ jobs:
         sg lxd -c "lxc exec testcon -- systemctl status rover || true"
 
         echo -e "\nCONFIGURE ROVER SERVICE:"
-        sg lxd -c "lxc exec testcon -- sed -i -e 's/#Environment=\"DISCORD_TOKEN.\\+/Environment="DISCORD_TOKEN=dummy\"/' /lib/systemd/system/rover.service"
+        sg lxd -c "lxc exec testcon -- sed -i -e 's/#Environment=\"DISCORD_TOKEN.\\+/Environment=\"DISCORD_TOKEN=dummy\"/' /lib/systemd/system/rover.service"
 
         echo -e "\nENABLE ROVER SERVICE:"
         sg lxd -c "lxc exec testcon -- systemctl enable rover"
