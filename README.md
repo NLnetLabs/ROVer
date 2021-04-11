@@ -49,10 +49,10 @@ Tested with [Routinator](https://nlnetlabs.nl/projects/rpki/routinator/) v0.8.3.
 ```
 $ sudo apt install -y ./path/to/rover.deb
 $ export EDITOR=$(which vi)
-$ sudo systemctl edit rover.service
+$ sudo systemctl edit rover
 [Service]
 Environment="DISCORD_TOKEN=<Enter Discord token here>"
 Environment="ROUTINATOR_HOST=<Enter Routinator host here>"
 :x
-$ sudo systemctl enable --now
+$ sudo systemctl enable --now rover
 ```
