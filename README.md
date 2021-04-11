@@ -56,3 +56,12 @@ Environment="ROUTINATOR_HOST=<Enter Routinator host here>"
 :x
 $ sudo systemctl enable --now rover
 ```
+
+# Using the bot
+
+- Create a Discord application and add a bot. See [the officla help](https://discord.com/developers/docs/topics/oauth2#bots).
+- Copy the bot token and use that as the `DISCORD_TOKEN` environment variable.
+- Run the Rust bot either with `cargo run` or as a systemd service (if using the Debian package).
+- Create an OAuth 2 URL with scope `bot` and viist the URL as a user with 'Manage Server' right.
+- The ROVer bot should show up as joining the Discord server.
+- Send the bot a message, e.g. with `!help`.
