@@ -43,3 +43,16 @@ $ ./target/release/rover
 ```
 
 Tested with [Routinator](https://nlnetlabs.nl/projects/rpki/routinator/) v0.8.3.
+
+# Using the Debian package
+
+```
+$ sudo apt install -y ./path/to/rover.deb
+$ export EDITOR=$(which vi)
+$ sudo systemctl edit rover.service
+[Service]
+Environment="DISCORD_TOKEN=<Enter Discord token here>"
+Environment="ROUTINATOR_HOST=<Enter Routinator host here>"
+:x
+$ sudo systemctl enable --now
+```
