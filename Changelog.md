@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased next version
+## 0.1.1 'Playing !help'
 
 New
 
