@@ -3,11 +3,7 @@ mod constants;
 mod types;
 mod util;
 
-use serenity::{
-    async_trait,
-    framework::{standard::macros::group, StandardFramework},
-    prelude::*,
-};
+use serenity::{async_trait, framework::{standard::macros::group, StandardFramework}, model::prelude::{Activity, Ready}, prelude::*};
 
 use commands::{about::*, help::*, validity::*};
 
@@ -20,7 +16,11 @@ struct General;
 struct Handler;
 
 #[async_trait]
-impl EventHandler for Handler {}
+impl EventHandler for Handler {
+    async fn ready(&self, ctx: Context, _: Ready) {
+        ctx.set_activity(Activity::playing("!help")).await;
+    }
+}
 
 #[tokio::main]
 async fn main() {
