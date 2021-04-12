@@ -5,28 +5,18 @@
 
 A simple Rust Discord bot for rendering the output of the [Routinator](https://nlnetlabs.nl/projects/rpki/routinator/) validity HTTP API endpoint as a textual table:
 
-For example given the command `!validity AS43996 5.57.16.0/24` the bot prints:
+For example given the command `!validity AS16509 185.49.143.0/24` the bot prints:
 
-```
-Results for ASAS43996 - 5.57.16.0/24: VALID
-At least one VRP Matches the Route Prefix
-
-Matched VRPs
-ASN       Prefix        Max Length
-AS43996   5.57.16.0/24  24
-
-Unmatched VRPs - ASN
-ASN       Prefix        Max Length
-AS19905   5.57.16.0/24  24
-AS26415   5.57.16.0/24  24
-
-Unmatched VRPs - Length
-ASN       Prefix        Max Length
-AS43996   5.57.16.0/22  22
-AS43996   5.57.16.0/21  21
-```
+![image](https://user-images.githubusercontent.com/3304436/114357357-f0e3c200-9b71-11eb-98c0-822eeb22a99e.png)
 
 Note: The AS prefix in the AS argument is optional and case insensitive.
+
+# Requirements
+
+- A Discord account with the right to create an application and bot.
+- Discord 'Manage Server' permission on the Discord server to which the bot should be invited.
+- Rust 1.51.0 _(might actually work with older versions but currently only tested with current Rust stasble which is 1.51.0 at the time of writing)_
+- Routinator 0.9.0-dev  _(as it uses the as-yet-unreleased endpoint JSON format /api/v1/status endpoint)_
 
 # Building
 
@@ -41,8 +31,6 @@ $ export DISCORD_TOKEN=xxx
 $ export ROUTINATOR_HOST=some.fqdn.com
 $ ./target/release/rover
 ```
-
-Tested with [Routinator](https://nlnetlabs.nl/projects/rpki/routinator/) v0.8.3.
 
 # Using the Debian package
 
