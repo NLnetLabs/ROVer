@@ -59,9 +59,13 @@ $ sudo systemctl enable --now rover
 
 # Using the bot
 
-- Create a Discord application and add a bot. See [the officla help](https://discord.com/developers/docs/topics/oauth2#bots).
+- Create a Discord application and add a bot. See [the official help](https://discord.com/developers/docs/topics/oauth2#bots).
 - Copy the bot token and use that as the `DISCORD_TOKEN` environment variable.
 - Run the Rust bot either with `cargo run` or as a systemd service (if using the Debian package).
 - Create an OAuth 2 URL with scope `bot` and viist the URL as a user with 'Manage Server' right.
 - The ROVer bot should show up as joining the Discord server.
 - Send the bot a message, e.g. with `!help`.
+
+# Icon credit
+
+Thanks to [pixabay](https://pixabay.com/) for the [ROVer image](https://pixabay.com/illustrations/dog-male-animal-comic-hybrid-pet-4524609/). Pixabay states for this image that is licensed under the Pixabay License which is _"Free for commercial use"_ with _"no attribution required"_. If you think this image is actually yours and not free to use **please let us know**!
