@@ -5,8 +5,7 @@ use serenity::{
 };
 
 use crate::{
-    types::{AddressOrigin, StatusResponse, ValidityResponse},
-    util::service_base_uri,
+    util::{http_client, service_base_uri},
 };
 
 use crate::constants::{LONGEST_EXPECTED_ASN, LONGEST_EXPECTED_PREFIX};
@@ -55,7 +54,7 @@ async fn validity(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult
 
 fn get_validity_report(as_number: &str, prefix: &str) -> Result<String, String> {
     let validity_url = format!("{}/api/v1/validity/AS{}/{}", service_base_uri(), as_number, prefix);
-    match ureq::get(&validity_url).call() {
+    match http_client().get(&validity_url).call() {
         Err(ureq::Error::Status(400, _)) => Err("Validity check failed: Invalid AS number or prefix".to_string()),
         Err(ureq::Error::Status(code, _)) => Err(format!("Validity check failed: Status code {}", code)),
         Err(_) => Err("Validity check failed: Unable to contact the service".to_string()),
@@ -72,7 +71,7 @@ fn get_validity_report(as_number: &str, prefix: &str) -> Result<String, String> 
 
 fn get_last_update_done_at() -> Result<String, String> {
     let status_url = format!("{}/api/v1/status", service_base_uri());
-    match ureq::get(&status_url).call() {
+    match http_client().get(&status_url).call() {
         Err(ureq::Error::Status(code, _)) => Err(format!("Status check failed: Status code {}", code)),
         Err(_) => Err("Status check failed: Unable to contact the service".to_string()),
         Ok(res) => {

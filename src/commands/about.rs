@@ -5,8 +5,7 @@ use serenity::{
 };
 
 use crate::constants::APP_VERSION;
-use crate::types::StatusResponse;
-use crate::util::service_base_uri;
+use crate::util::{http_client, service_base_uri};
 
 #[command]
 async fn about(ctx: &Context, msg: &Message) -> CommandResult {
@@ -32,7 +31,7 @@ See https://github.com/NLnetLabs/ROVer for more information.
 
 fn get_routinator_version() -> Result<String, String> {
     let status_url = format!("{}/api/v1/status", service_base_uri());
-    match ureq::get(&status_url).call() {
+    match http_client().get(&status_url).call() {
         Err(ureq::Error::Status(code, _)) => Err(format!("Version check failed: Status code {}", code)),
         Err(_) => Err("Version check failed: Unable to contact the service".to_string()),
         Ok(res) => {
