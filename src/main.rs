@@ -5,6 +5,8 @@ mod util;
 
 use serenity::{async_trait, framework::{standard::macros::group, StandardFramework}, model::prelude::{Activity, Ready}, prelude::*};
 
+use serenity::model::guild::GuildStatus;
+
 use commands::{about::*, help::*, validity::*};
 
 use std::env;
@@ -17,7 +19,22 @@ struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
-    async fn ready(&self, ctx: Context, _: Ready) {
+    async fn ready(&self, ctx: Context, ready: Ready) {
+        println!("Ready, listing joined guilds:");
+        for guild_status in &ready.guilds {
+            match guild_status {
+                GuildStatus::OnlinePartialGuild(p) => println!("  OnlinePartialGuild: name={}", p.name),
+                GuildStatus::OnlineGuild(g) => println!("  OnlineGuild: name={}", g.name),
+                GuildStatus::Offline(u) => {
+                    match ctx.http.get_guild(*u.id.as_u64()).await {
+                        Ok(p) => println!("  OfflineGuild: name={}", p.name),
+                        Err(_) => println!("  OfflineGuild: id={}", u.id),
+                    }
+                }
+                _ => println!("  UnknownGuildStatus"),
+            }
+        }
+
         ctx.set_activity(Activity::playing("!help")).await;
     }
 }
