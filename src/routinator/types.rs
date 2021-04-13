@@ -54,7 +54,7 @@ pub struct StatusResponse {
 
 #[cfg(test)]
 mod tests {
-    use crate::types::ValidityResponse;
+    use super::*;
 
     #[test]
     fn test_json_parsing() {

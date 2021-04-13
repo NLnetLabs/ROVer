@@ -5,6 +5,7 @@ use serenity::{
 };
 
 use crate::constants::APP_VERSION;
+use crate::routinator::types::StatusResponse;
 use crate::util::{http_client, service_base_uri};
 
 #[command]

@@ -1,6 +1,11 @@
 mod commands;
 mod constants;
-mod types;
+mod routinator {
+    pub mod types;
+}
+mod ripestat {
+    pub mod types;
+}
 mod util;
 
 use serenity::{async_trait, framework::{standard::macros::group, StandardFramework}, model::prelude::{Activity, Ready}, prelude::*};
