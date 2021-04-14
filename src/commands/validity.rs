@@ -5,12 +5,15 @@ use serenity::{
 };
 
 use crate::{
-    types::{AddressOrigin, StatusResponse, ValidityResponse},
-    util::service_base_uri,
+    ripestat::types::AsOverviewResponse,
+    routinator::types::{AddressOrigin, StatusResponse, ValidityResponse},
+    util::{http_client, service_base_uri},
 };
 
 use crate::constants::{LONGEST_EXPECTED_ASN, LONGEST_EXPECTED_PREFIX};
 
+// TODO: Simplify this with the ? operator
+// TODO: Work out what Serenity does with returned errors
 #[command]
 async fn validity(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     let as_number_res = args.single::<String>();
@@ -30,19 +33,16 @@ async fn validity(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult
                 as_number
             };
 
-            let last_update_res = get_last_update_done_at();
-            if let Err(err) = last_update_res {
-                err
-            } else {
-                let validity_report_res = get_validity_report(&as_number, &prefix);
-                if let Err(err) = validity_report_res {
-                    err
-                } else {
-                    let mut report = String::new();
-                    report.push_str(&validity_report_res.unwrap());
-                    report.push('\n');
-                    report.push_str(&format!("Last updated at: {}", last_update_res.unwrap()));
-                    report
+            match get_last_update_done_at() {
+                Err(err) => err,
+                Ok(last_update) => {
+                    match get_validity_report(&as_number, &prefix) {
+                        Err(err) => err,
+                        Ok(validity_report) => {
+                            let as_name = get_as_holder(&as_number).unwrap_or(None);
+                            render_validity_report(validity_report, as_name, last_update)
+                        }
+                    }
                 }
             }
         }
@@ -53,9 +53,10 @@ async fn validity(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult
     Ok(())
 }
 
-fn get_validity_report(as_number: &str, prefix: &str) -> Result<String, String> {
+/// Fetch the Routinator validity report for the specified AS and prefix.
+fn get_validity_report(as_number: &str, prefix: &str) -> Result<ValidityResponse, String> {
     let validity_url = format!("{}/api/v1/validity/AS{}/{}", service_base_uri(), as_number, prefix);
-    match ureq::get(&validity_url).call() {
+    match http_client().get(&validity_url).call() {
         Err(ureq::Error::Status(400, _)) => Err("Validity check failed: Invalid AS number or prefix".to_string()),
         Err(ureq::Error::Status(code, _)) => Err(format!("Validity check failed: Status code {}", code)),
         Err(_) => Err("Validity check failed: Unable to contact the service".to_string()),
@@ -64,15 +65,16 @@ fn get_validity_report(as_number: &str, prefix: &str) -> Result<String, String> 
 
             match json_res {
                 Err(err) => Err(format!("Validity check failed: Bad response: {}", err)),
-                Ok(validity_json) => Ok(build_validity_report(validity_json)),
+                Ok(validity_json) => Ok(validity_json),
             }
         }
     }
 }
 
+/// Fetch the timestamp at which Routinator last completed an update of its data
 fn get_last_update_done_at() -> Result<String, String> {
     let status_url = format!("{}/api/v1/status", service_base_uri());
-    match ureq::get(&status_url).call() {
+    match http_client().get(&status_url).call() {
         Err(ureq::Error::Status(code, _)) => Err(format!("Status check failed: Status code {}", code)),
         Err(_) => Err("Status check failed: Unable to contact the service".to_string()),
         Ok(res) => {
@@ -86,7 +88,31 @@ fn get_last_update_done_at() -> Result<String, String> {
     }
 }
 
-fn build_validity_report(json: ValidityResponse) -> String {
+/// Fetch the name of an AS holder using the RIPEstat service
+fn get_as_holder(as_number: &str) -> Result<Option<String>, String> {
+    let as_overview_url = format!("https://stat.ripe.net/data/as-overview/data.json?resource=AS{}&sourceapp=ROVer", as_number);
+    match http_client().get(&as_overview_url).call() {
+        Err(ureq::Error::Status(code, _)) => Err(format!("RIPEstat AS Overview failed: Status code {}", code)),
+        Err(_) => Err("RIPEstat AS Overview failed: Unable to contact the service".to_string()),
+        Ok(res) => {
+            let json_res: std::io::Result<AsOverviewResponse> = res.into_json();
+
+            match json_res {
+                Err(err) => Err(format!("RIPEstat AS Overview failed: Bad response: {}", err)),
+                Ok(json) => {
+                    if json.status == "ok" {
+                        Ok(json.data.holder)
+                    } else {
+                        Err(format!("RIPEstat AS Overview failed: Bad response status: {}", json.status))
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Pretty print the given validity report for the given AS name based on Routinator data last updated as specified.
+fn render_validity_report(json: ValidityResponse, as_name_opt: Option<String>, last_update: String) -> String {
     let mut report = String::new();
     report.push_str(&format!(
         "Results for {asn} - {prefix}: {state}\n",
@@ -117,6 +143,12 @@ fn build_validity_report(json: ValidityResponse) -> String {
             &json.validated_route.validity.vrps.unmatched_length,
         ));
     }
+
+    report.push('\n');
+    if let Some(as_name) = as_name_opt {
+        report.push_str(&format!("AS Name: {}\n", as_name));
+    }
+    report.push_str(&format!("Validation last updated at: {}", last_update));
 
     report
 }
