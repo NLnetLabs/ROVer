@@ -9,6 +9,10 @@ For example given the command `!validity AS16509 185.49.143.0/24` the bot prints
 
 ![image](https://user-images.githubusercontent.com/3304436/114357357-f0e3c200-9b71-11eb-98c0-822eeb22a99e.png)
 
+Since v0.1.2 it also shows the AS name (powered by the [RIPEstat Data API](https://stat.ripe.net/docs/data_api)):
+
+![image](https://user-images.githubusercontent.com/3304436/114722410-128fa580-9d3a-11eb-9f35-eeba4eeace00.png)
+
 Note: The AS prefix in the AS argument is optional and case insensitive.
 
 # Requirements
