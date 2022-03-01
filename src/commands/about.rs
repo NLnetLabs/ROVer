@@ -1,3 +1,5 @@
+use std::ffi::OsString;
+
 use serenity::{
     client::Context,
     framework::standard::{macros::command, CommandResult},
@@ -10,17 +12,24 @@ use crate::util::{http_client, service_base_uri};
 
 #[command]
 async fn about(ctx: &Context, msg: &Message) -> CommandResult {
+    let hostname = hostname::get()
+        .unwrap_or(OsString::from("Unknown"))
+        .into_string()
+        .unwrap_or("Invalid".to_string());
+
     let about = format!(
         r#"
 ROVer - an open source bot by NLnet Labs for in-chat feedback about the state of the RPKI.
 
 ROVer Version  : {version}
+Host FQDN      : {host_fqdn}
 Service URI    : {service_base_uri}
 Service Version: {service_version}
 
 See https://github.com/NLnetLabs/ROVer for more information.
 "#,
         version = APP_VERSION,
+        host_fqdn = hostname,
         service_base_uri = service_base_uri(),
         service_version = get_routinator_version().unwrap_or("Unavailable".to_string()),
     );

@@ -15,18 +15,11 @@ name = "rover"
 path = "src/main.rs"
 
 [dependencies]
+hostname = "0.3"
 serde = "*"
-
-[dependencies.serenity]
-version = "0.10"
-
-[dependencies.tokio]
-features = ["macros", "rt-multi-thread"]
-version = "1.0"
-
-[dependencies.ureq]
-features = ["json"]
-version = "2.1.0"
+serenity = "0.10"
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+ureq = { version = "2.1.0", features = ["json"] }
 
 [dev-dependencies]
 serde_json = "1.0"
