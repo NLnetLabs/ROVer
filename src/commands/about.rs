@@ -13,9 +13,9 @@ use crate::util::{http_client, service_base_uri};
 #[command]
 async fn about(ctx: &Context, msg: &Message) -> CommandResult {
     let hostname = hostname::get()
-        .unwrap_or(OsString::from("Unknown"))
+        .unwrap_or_else(|_| OsString::from("Unknown"))
         .into_string()
-        .unwrap_or("Invalid".to_string());
+        .unwrap_or_else(|_| "Invalid".to_string());
 
     let about = format!(
         r#"
@@ -31,7 +31,7 @@ See https://github.com/NLnetLabs/ROVer for more information.
         version = APP_VERSION,
         host_fqdn = hostname,
         service_base_uri = service_base_uri(),
-        service_version = get_routinator_version().unwrap_or("Unavailable".to_string()),
+        service_version = get_routinator_version().unwrap_or_else(|_| "Unavailable".to_string()),
     );
 
     msg.reply(ctx, format!("```{}```", about)).await?;
