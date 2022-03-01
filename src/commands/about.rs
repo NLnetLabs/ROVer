@@ -22,14 +22,14 @@ async fn about(ctx: &Context, msg: &Message) -> CommandResult {
 ROVer - an open source bot by NLnet Labs for in-chat feedback about the state of the RPKI.
 
 ROVer Version  : {version}
-Host FQDN      : {host_fqdn}
+Hostname       : {hostname}
 Service URI    : {service_base_uri}
 Service Version: {service_version}
 
 See https://github.com/NLnetLabs/ROVer for more information.
 "#,
         version = APP_VERSION,
-        host_fqdn = hostname,
+        hostname = hostname,
         service_base_uri = service_base_uri(),
         service_version = get_routinator_version().unwrap_or_else(|_| "Unavailable".to_string()),
     );
