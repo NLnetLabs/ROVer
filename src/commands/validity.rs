@@ -35,15 +35,13 @@ async fn validity(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult
 
             match get_last_update_done_at() {
                 Err(err) => err,
-                Ok(last_update) => {
-                    match get_validity_report(&as_number, &prefix) {
-                        Err(err) => err,
-                        Ok(validity_report) => {
-                            let as_name = get_as_holder(&as_number).unwrap_or(None);
-                            render_validity_report(validity_report, as_name, last_update)
-                        }
+                Ok(last_update) => match get_validity_report(&as_number, &prefix) {
+                    Err(err) => err,
+                    Ok(validity_report) => {
+                        let as_name = get_as_holder(&as_number).unwrap_or(None);
+                        render_validity_report(validity_report, as_name, last_update)
                     }
-                }
+                },
             }
         }
     };
@@ -90,7 +88,10 @@ fn get_last_update_done_at() -> Result<String, String> {
 
 /// Fetch the name of an AS holder using the RIPEstat service
 fn get_as_holder(as_number: &str) -> Result<Option<String>, String> {
-    let as_overview_url = format!("https://stat.ripe.net/data/as-overview/data.json?resource=AS{}&sourceapp=ROVer", as_number);
+    let as_overview_url = format!(
+        "https://stat.ripe.net/data/as-overview/data.json?resource=AS{}&sourceapp=ROVer",
+        as_number
+    );
     match http_client().get(&as_overview_url).call() {
         Err(ureq::Error::Status(code, _)) => Err(format!("RIPEstat AS Overview failed: Status code {}", code)),
         Err(_) => Err("RIPEstat AS Overview failed: Unable to contact the service".to_string()),
@@ -103,7 +104,10 @@ fn get_as_holder(as_number: &str) -> Result<Option<String>, String> {
                     if json.status == "ok" {
                         Ok(json.data.holder)
                     } else {
-                        Err(format!("RIPEstat AS Overview failed: Bad response status: {}", json.status))
+                        Err(format!(
+                            "RIPEstat AS Overview failed: Bad response status: {}",
+                            json.status
+                        ))
                     }
                 }
             }

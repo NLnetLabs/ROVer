@@ -10,12 +10,14 @@ mod util;
 
 use serenity::{
     async_trait,
-    framework::{standard::macros::group, StandardFramework, Framework},
+    framework::{standard::macros::group, Framework, StandardFramework},
     model::{
         channel::Message,
-        prelude::{Activity, Ready}, event::MessageUpdateEvent,
+        event::MessageUpdateEvent,
+        prelude::{Activity, Ready},
     },
-    prelude::*, utils::CustomMessage,
+    prelude::*,
+    utils::CustomMessage,
 };
 
 use serenity::model::guild::GuildStatus;
@@ -33,7 +35,9 @@ struct Handler {
 }
 
 impl Handler {
-    fn new(framework: Arc<Box<(dyn Framework + Sync + 'static + Send)>>) -> Self { Self { framework } }
+    fn new(framework: Arc<Box<(dyn Framework + Sync + 'static + Send)>>) -> Self {
+        Self { framework }
+    }
 }
 
 #[async_trait]
@@ -68,7 +72,9 @@ impl EventHandler for Handler {
     ) {
         // In my testing the old and new message are always None so I extract the required
         // data from the raw event instead.
-        if let (Some(ts), Some(guild_id), Some(author), Some(content)) = (event.edited_timestamp, event.guild_id, event.author, event.content) {
+        if let (Some(ts), Some(guild_id), Some(author), Some(content)) =
+            (event.edited_timestamp, event.guild_id, event.author, event.content)
+        {
             let mut msg = CustomMessage::new();
             msg.timestamp(ts);
             msg.id(event.id);
