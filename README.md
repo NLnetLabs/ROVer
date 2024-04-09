@@ -19,7 +19,7 @@ Note: The AS prefix in the AS argument is optional and case insensitive.
 
 - A Discord account with the right to create an application and bot.
 - Discord 'Manage Server' permission on the Discord server to which the bot should be invited.
-- Rust 1.51.0 _(might actually work with older versions but currently only tested with current Rust stasble which is 1.51.0 at the time of writing)_
+- Rust 1.51.0 _(might actually work with older versions but currently only tested with current Rust stable which is 1.51.0 at the time of writing)_
 - Routinator 0.9.0
 
 # Building
